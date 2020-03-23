@@ -14,3 +14,12 @@ Example of Simple Managed Product:
 This is a simple purchase of Managed Product. For example a user buys “Remove Ads” product which has to be owned for life time. So it cannot be purchased again by the same user. Developer do not write any code for consuming the product after purchase.
 
 SUBSCRIPTION – The name itself says it all. It a subscription of any service. For example a purchase for unlimited fuel for one month in car racing game (Example of the Sample In App Billing App provided by Google).
+
+# Library Used
+Butterknife: https://github.com/JakeWharton/butterknife
+Android In-App Billing v3: https://github.com/anjlab/android-inapp-billing-v3
+K-Alert Dialog: https://github.com/TutorialsAndroid/KAlertDialog
+
+# Design Pattern
+MVVM
+
