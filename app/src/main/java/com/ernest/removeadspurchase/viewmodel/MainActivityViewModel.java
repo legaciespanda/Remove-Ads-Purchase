@@ -9,16 +9,16 @@ public class MainActivityViewModel extends ViewModel {
     private  final boolean ENABLE_ADMOB_BANNER_ADS = true;
 
     //YOUR LICENSE KEY FROM GOOGLE PLAY CONSOLE HERE
-    private  final String GOOGLE_PLAY_CONSOL_LICENSE_KEY = "";
+    private  final String GOOGLE_PLAY_CONSOL_LICENSE_KEY = "GOOGLE_PLAY_CONSOL_LICENSE_KEY HERE";
 
     //YOUR SUBSCRIPTION ID FROM GOOGLE PLAY CONSOLE HERE
-    private  final String GOOGLE_PLAY_CONSOL_SUBSCRIPTION_ID = "";
+    private  final String GOOGLE_PLAY_CONSOL_SUBSCRIPTION_ID = "GOOGLE_PLAY_CONSOL_SUBSCRIPTION_ID HERE";
 
     //DEVELOPER PAYLOAD HERE
-    private  final String DEVELOPER_PAYLOAD = "";
+    private  final String DEVELOPER_PAYLOAD = "DEVELOPER_PAYLOAD HERE";
 
     //PRODUCT ID OR SKU
-    private  final String PRODUCT_SKU = "";
+    private  final String PRODUCT_SKU = "PRODUCT_SKU HERE";
 
 
     public  String getGooglePlayConsolLicenseKey() {
