@@ -6,7 +6,7 @@ public class MainActivityViewModel extends ViewModel {
 
     //Ads Configuration
     //set true to enable or set false to disable
-    private  final boolean ENABLE_ADMOB_BANNER_ADS = true;
+    private  final boolean ENABLE_ADMOB_BANNER_ADS = false;
 
     //YOUR LICENSE KEY FROM GOOGLE PLAY CONSOLE HERE
     private  final String GOOGLE_PLAY_CONSOL_LICENSE_KEY = "GOOGLE_PLAY_CONSOL_LICENSE_KEY HERE";

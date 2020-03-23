@@ -5,12 +5,22 @@ import androidx.lifecycle.ViewModelProviders;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.widget.Toast;
 
 import com.anjlab.android.iab.v3.BillingProcessor;
 import com.anjlab.android.iab.v3.TransactionDetails;
 import com.developer.kalert.KAlertDialog;
 import com.ernest.removeadspurchase.R;
 import com.ernest.removeadspurchase.viewmodel.MainActivityViewModel;
+import com.google.android.gms.ads.AdListener;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.InterstitialAd;
+import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.initialization.InitializationStatus;
+import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
+
+import butterknife.BindView;
 
 public class MainActivity extends AppCompatActivity implements BillingProcessor.IBillingHandler{
 
@@ -19,6 +29,11 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
 
     //Creating an instance of the BillingProcessor class
     BillingProcessor bp;
+    private InterstitialAd interstitialAd;
+    //adview view injection
+    @BindView(R.id.adView)
+    private AdView mAdView;
+
 
     /**
      * Before any usage we have to check for the in-app billing services availability.
@@ -36,6 +51,50 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
 
         bp = new BillingProcessor(this, mViewModel.getGooglePlayConsolLicenseKey(), this);
         bp.initialize();
+//
+//        //initialize banner MobileAds
+//        MobileAds.initialize(this, new OnInitializationCompleteListener() {
+//            @Override
+//            public void onInitializationComplete(InitializationStatus initializationStatus) {
+//            }
+//        });
+
+        //instance of InterstitialAd class
+        MobileAds.initialize(this,"ca-app-pub-3940256099942544~3347511713");
+        interstitialAd = new InterstitialAd(this);
+        // set the ad unit ID
+        interstitialAd.setAdUnitId(getString(R.string.interstitial_full_screen));
+        //create an instance of AdRequest and call the build method
+        AdRequest adRequest = new AdRequest.Builder()
+                    .build();
+        // Load ads into Interstitial Ads
+        interstitialAd.loadAd(adRequest);
+
+//        interstitialAd.setAdListener(new AdListener() {
+//            public void onAdLoaded() {
+//                showInterstitialAd(true);
+//            }
+//            @Override
+//            public void onAdClosed() {
+//                //Toast.makeText(getApplicationContext(), "Ad is closed!", Toast.LENGTH_SHORT).show();
+//            }
+//
+//            @Override
+//            public void onAdFailedToLoad(int errorCode) {
+//                Toast.makeText(getApplicationContext(), "Ad failed to load! error code: " + errorCode, Toast.LENGTH_SHORT).show();
+//            }
+//
+//            @Override
+//            public void onAdLeftApplication() {
+//                //Toast.makeText(getApplicationContext(), "Ad left application!", Toast.LENGTH_SHORT).show();
+//            }
+//
+//            @Override
+//            public void onAdOpened() {
+//               // Toast.makeText(getApplicationContext(), "Ad is opened!", Toast.LENGTH_SHORT).show();
+//            }
+//        });
+
 
         /**
          * IMPORTANT: when you provide a payload, internally the library prepends a string to your payload.
@@ -44,6 +103,18 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
          * */
         bp.purchase(this,mViewModel.getPRODUCT_SKU(),mViewModel.getDeveloperPayload() );
     }
+
+    private Boolean showInterstitialAd(boolean check){
+        //final boolean ENABLE_ADMOB_BANNER_ADS = false;
+        if(check){
+            if (interstitialAd.isLoaded()) {
+                  interstitialAd.show();
+                }
+        }else {
+        }
+        return false;
+    }
+
 
     //overiding callback methods of the BillingProcessor class
 
@@ -63,13 +134,9 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
         //always consume made purchase and allow to buy same product multiple times
         bp.consumePurchase(mViewModel.getPRODUCT_SKU());
         // bought the premium upgrade! so we have to remove ads
-        removeAds();
+        showInterstitialAd(false);
         showSuccessPurchase();
 
-
-    }
-
-    private void removeAds() {
 
     }
 
