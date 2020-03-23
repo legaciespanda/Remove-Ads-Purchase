@@ -17,7 +17,9 @@ SUBSCRIPTION – The name itself says it all. It a subscription of any service. 
 
 # Library Used
 Butterknife: https://github.com/JakeWharton/butterknife
+
 Android In-App Billing v3: https://github.com/anjlab/android-inapp-billing-v3
+
 K-Alert Dialog: https://github.com/TutorialsAndroid/KAlertDialog
 
 # Design Pattern
