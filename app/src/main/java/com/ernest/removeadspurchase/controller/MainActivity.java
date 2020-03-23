@@ -10,10 +10,8 @@ import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
-
 import com.anjlab.android.iab.v3.BillingProcessor;
 import com.anjlab.android.iab.v3.TransactionDetails;
-import com.developer.kalert.KAlertDialog;
 import com.ernest.removeadspurchase.R;
 import com.ernest.removeadspurchase.viewmodel.MainActivityViewModel;
 import com.gmail.samehadar.iosdialog.IOSDialog;
