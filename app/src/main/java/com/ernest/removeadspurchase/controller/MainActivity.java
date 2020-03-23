@@ -113,18 +113,6 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
          * */
             bp.purchase(this,mViewModel.getPRODUCT_SKU(),mViewModel.getDeveloperPayload() );
     }
-
-    private Boolean showInterstitialAd(boolean check){
-        //final boolean ENABLE_ADMOB_BANNER_ADS = false;
-        if(check){
-            if (interstitialAd.isLoaded()) {
-                  interstitialAd.show();
-                }
-        }else {
-        }
-        return false;
-    }
-
     public void initializeBilling(){
         // intialize the billing process
         iosDialog = new IOSDialog.Builder(this)
@@ -203,7 +191,6 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
 
     }
 
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (!bp.handleActivityResult(requestCode, resultCode, data)) {
@@ -216,6 +203,17 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
                 .setTitleText("Congratulations!")
                 .setContentText("Purchase Successfully made! Ads are now disabled!")
                 .show();
+    }
+
+    private Boolean showInterstitialAd(boolean check){
+        //final boolean ENABLE_ADMOB_BANNER_ADS = false;
+        if(check){
+            if (interstitialAd.isLoaded()) {
+                interstitialAd.show();
+            }
+        }else {
+        }
+        return false;
     }
 
     /**
