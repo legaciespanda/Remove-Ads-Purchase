@@ -20,6 +20,8 @@ public class MainActivityViewModel extends ViewModel {
     //PRODUCT ID OR SKU
     private  final String PRODUCT_SKU = "PRODUCT_SKU HERE";
 
+    private String ispuduct_puchase = "ispuduct_puchase";
+
 
     public  String getGooglePlayConsolLicenseKey() {
         return GOOGLE_PLAY_CONSOL_LICENSE_KEY;
@@ -40,4 +42,7 @@ public class MainActivityViewModel extends ViewModel {
         return PRODUCT_SKU;
     }
 
+    public String getIspuduct_puchase() {
+        return ispuduct_puchase;
+    }
 }

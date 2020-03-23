@@ -44,6 +44,8 @@ dependencies {
     implementation "android.arch.lifecycle:extensions:$lifecycle_version"
     annotationProcessor "android.arch.lifecycle:compiler:$lifecycle_version"
     implementation 'com.google.android.gms:play-services-ads:19.0.1'
+
+    implementation 'com.gmail.samehadar:iosdialog:1.0'
 }
 
 apply plugin: 'com.google.gms.google-services'

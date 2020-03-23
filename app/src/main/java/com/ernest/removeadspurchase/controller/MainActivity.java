@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
@@ -15,6 +16,7 @@ import com.anjlab.android.iab.v3.TransactionDetails;
 import com.developer.kalert.KAlertDialog;
 import com.ernest.removeadspurchase.R;
 import com.ernest.removeadspurchase.viewmodel.MainActivityViewModel;
+import com.gmail.samehadar.iosdialog.IOSDialog;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
@@ -39,14 +41,8 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
     @BindView(R.id.disableAdsBtn)
     Button purchase_btn;
     SharedPreferences sharedPreferences;
-
-
-    /**
-     * Before any usage we have to check for the in-app billing services availability.
-     * In some older devices or chinese ones it may happen that Play Market is unavailable
-     * or is deprecated and doesn't support in-app billing.
-     * */
-    boolean isOneTimePurchaseSupported = bp.isOneTimePurchaseSupported();
+    IOSDialog iosDialog;
+    public static boolean purduct_purchase=false;
 
 
     @Override
@@ -56,15 +52,13 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
         mViewModel = ViewModelProviders.of(this).get(MainActivityViewModel.class);
         sharedPreferences = getSharedPreferences("disable_ad", MODE_PRIVATE);
 
+        initializeBilling();
         purchase_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Disable_ads();
             }
         });
-
-        bp = new BillingProcessor(this, mViewModel.getGooglePlayConsolLicenseKey(), this);
-        bp.initialize();
 
         //instance of InterstitialAd class
         MobileAds.initialize(this,"ca-app-pub-3940256099942544~3347511713");
@@ -102,19 +96,22 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
 //            }
 //        });
 
+    }
 
+    private void Disable_ads() {
+        /**
+         * Before any usage we have to check for the in-app billing services availability.
+         * In some older devices or chinese ones it may happen that Play Market is unavailable
+         * or is deprecated and doesn't support in-app billing.
+         * */
+        boolean isAvailable = BillingProcessor.isIabServiceAvailable(this);
+        if(isAvailable)
         /**
          * IMPORTANT: when you provide a payload, internally the library prepends a string to your payload.
          * For subscriptions, it prepends "subs:\<productId\>:", and for products, it prepends "inapp:\<productId\>:\<UUID\>:".
          * This is important to know if you do any validation on the payload returned from Google Play after a successful purchase.
          * */
-        bp.purchase(this,mViewModel.getPRODUCT_SKU(),mViewModel.getDeveloperPayload() );
-    }
-
-    private void Disable_ads() {
-        boolean isAvailable = BillingProcessor.isIabServiceAvailable(this);
-        if(isAvailable)
-            bp.subscribe(this,mViewModel.getPRODUCT_SKU());
+            bp.purchase(this,mViewModel.getPRODUCT_SKU(),mViewModel.getDeveloperPayload() );
     }
 
     private Boolean showInterstitialAd(boolean check){
@@ -128,6 +125,19 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
         return false;
     }
 
+    public void initializeBilling(){
+        // intialize the billing process
+        iosDialog = new IOSDialog.Builder(this)
+                .setCancelable(false)
+                .setSpinnerClockwise(false)
+                .setMessageContentGravity(Gravity.END)
+                .build();
+        iosDialog.show();
+
+        bp = new BillingProcessor(this, mViewModel.getGooglePlayConsolLicenseKey(), this);
+        bp.initialize();
+    }
+
     //overiding callback methods of the BillingProcessor class
 
     @Override
@@ -137,14 +147,18 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
          */
         // on billing intialize we will get the data from google
         if(bp.loadOwnedPurchasesFromGoogle()){
-
             // check user is already subscribe or not
             if(bp.isPurchased(mViewModel.getPRODUCT_SKU())){
-                // if already subscribe then we will change the static variable and goback
+                /** if already subscribe then we will change the static variable
+                 * and call billingrpocessor release() method.
+                 * */
                 MainActivity.purduct_purchase=true;
+                bp.release();
                 iosDialog.cancel();
             }
             else {
+                sharedPreferences.edit().putBoolean(mViewModel.getIspuduct_puchase(),false).commit();
+                purduct_purchase=false;
 
                 iosDialog.cancel();
             }
@@ -157,7 +171,9 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
         /**
          * Called when requested PRODUCT ID was successfully purchased
          */
-
+        // if the user is purchase successfully then we will store the data in local
+        sharedPreferences.edit().putBoolean(mViewModel.getIspuduct_puchase(),true).commit();
+        purduct_purchase = true;
         //always consume made purchase and allow to buy same product multiple times
         bp.consumePurchase(mViewModel.getPRODUCT_SKU());
         // bought the premium upgrade! so we have to remove ads
