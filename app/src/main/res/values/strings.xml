@@ -5,4 +5,5 @@
     <!-- AdMob ad unit IDs -->
     <string name="admob_app_id">ca-app-pub-XXXXXXXX~XXXXXXXXXXX</string>
     <string name="interstitial_full_screen">ca-app-pub-XXXXXXXX~XXXXXXXXXXX</string>
+    <string name="admob_interstitial_unit_id">ca-app-pub-2543310882018957/1863602974</string>
 </resources>

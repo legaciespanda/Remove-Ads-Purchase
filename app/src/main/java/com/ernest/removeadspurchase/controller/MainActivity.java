@@ -145,8 +145,7 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
         purduct_purchase = true;
         //always consume made purchase and allow to buy same product multiple times
         bp.consumePurchase(mViewModel.getPRODUCT_SKU());
-        // bought the premium upgrade! so we have to remove ads
-        showInterstitialAd(false);
+        boolean fa = mViewModel.isENABLE_ADMOB_INTERSTITIAL_ADS() == false;
         showSuccessPurchase();
 
 
@@ -186,17 +185,6 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
                 .show();
     }
 
-    private Boolean showInterstitialAd(boolean check){
-        //mViewModel.isEnableAdmobBannerAds();
-
-        if(check){
-            if (interstitialAd.isLoaded()) {
-                interstitialAd.show();
-            }
-        }else {
-        }
-        return false;
-    }
 
     /**
      *  release your BillingProcessor instance!
