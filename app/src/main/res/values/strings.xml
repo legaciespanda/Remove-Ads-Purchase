@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">Remove Ads Purchase</string>
+    <string name="banner_ad_unit_id">ca-app-pub-3940256099942544/6300978111</string>
+
+    <!--AdMob-->
+    <string name="admob_publisher_id">pub-2543310882018957</string>
+    <string name="admob_app_id">ca-app-pub-2543310882018957~3647457930</string>
+    <string name="admob_banner_unit_id">ca-app-pub-2543310882018957/6377563056</string>
+    <string name="admob_interstitial_unit_id">ca-app-pub-2543310882018957/1863602974</string>
 </resources>
