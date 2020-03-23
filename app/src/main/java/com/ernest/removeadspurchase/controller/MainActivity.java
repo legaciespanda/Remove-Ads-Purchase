@@ -4,7 +4,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProviders;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.anjlab.android.iab.v3.BillingProcessor;
@@ -33,6 +36,9 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
     //adview view injection
     @BindView(R.id.adView)
     private AdView mAdView;
+    @BindView(R.id.disableAdsBtn)
+    Button purchase_btn;
+    SharedPreferences sharedPreferences;
 
 
     /**
@@ -48,16 +54,17 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         mViewModel = ViewModelProviders.of(this).get(MainActivityViewModel.class);
+        sharedPreferences = getSharedPreferences("disable_ad", MODE_PRIVATE);
+
+        purchase_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Disable_ads();
+            }
+        });
 
         bp = new BillingProcessor(this, mViewModel.getGooglePlayConsolLicenseKey(), this);
         bp.initialize();
-//
-//        //initialize banner MobileAds
-//        MobileAds.initialize(this, new OnInitializationCompleteListener() {
-//            @Override
-//            public void onInitializationComplete(InitializationStatus initializationStatus) {
-//            }
-//        });
 
         //instance of InterstitialAd class
         MobileAds.initialize(this,"ca-app-pub-3940256099942544~3347511713");
@@ -104,6 +111,12 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
         bp.purchase(this,mViewModel.getPRODUCT_SKU(),mViewModel.getDeveloperPayload() );
     }
 
+    private void Disable_ads() {
+        boolean isAvailable = BillingProcessor.isIabServiceAvailable(this);
+        if(isAvailable)
+            bp.subscribe(this,mViewModel.getPRODUCT_SKU());
+    }
+
     private Boolean showInterstitialAd(boolean check){
         //final boolean ENABLE_ADMOB_BANNER_ADS = false;
         if(check){
@@ -115,7 +128,6 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
         return false;
     }
 
-
     //overiding callback methods of the BillingProcessor class
 
     @Override
@@ -123,6 +135,21 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
         /**
          * Called when BillingProcessor was initialized and it's ready to purchase
          */
+        // on billing intialize we will get the data from google
+        if(bp.loadOwnedPurchasesFromGoogle()){
+
+            // check user is already subscribe or not
+            if(bp.isPurchased(mViewModel.getPRODUCT_SKU())){
+                // if already subscribe then we will change the static variable and goback
+                MainActivity.purduct_purchase=true;
+                iosDialog.cancel();
+            }
+            else {
+
+                iosDialog.cancel();
+            }
+        }
+
 
     }
     @Override
