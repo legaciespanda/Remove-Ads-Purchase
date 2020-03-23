@@ -46,6 +46,7 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
     SharedPreferences sharedPreferences;
     IOSDialog iosDialog;
     public static boolean purduct_purchase=false;
+    int counter = 1;
 
 
     @Override
@@ -74,30 +75,7 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
         // Load ads into Interstitial Ads
         interstitialAd.loadAd(adRequest);
 
-//        interstitialAd.setAdListener(new AdListener() {
-//            public void onAdLoaded() {
-//                showInterstitialAd(true);
-//            }
-//            @Override
-//            public void onAdClosed() {
-//                //Toast.makeText(getApplicationContext(), "Ad is closed!", Toast.LENGTH_SHORT).show();
-//            }
-//
-//            @Override
-//            public void onAdFailedToLoad(int errorCode) {
-//                Toast.makeText(getApplicationContext(), "Ad failed to load! error code: " + errorCode, Toast.LENGTH_SHORT).show();
-//            }
-//
-//            @Override
-//            public void onAdLeftApplication() {
-//                //Toast.makeText(getApplicationContext(), "Ad left application!", Toast.LENGTH_SHORT).show();
-//            }
-//
-//            @Override
-//            public void onAdOpened() {
-//               // Toast.makeText(getApplicationContext(), "Ad is opened!", Toast.LENGTH_SHORT).show();
-//            }
-//        });
+        loadInterstitialAd();
 
     }
 
@@ -134,7 +112,7 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
     @Override
     public void onBillingInitialized() {
         /**
-         * Called when BillingProcessor was initialized and it's ready to purchase
+         * Called when BillingProcessor is  initialized and it's ready to purchase
          */
         // on billing intialize we will get the data from google
         if(bp.loadOwnedPurchasesFromGoogle()){
@@ -229,5 +207,42 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
             bp.release();
         }
         super.onDestroy();
+    }
+
+
+
+    private void loadInterstitialAd() {
+        if (mViewModel.isENABLE_ADMOB_INTERSTITIAL_ADS()) {
+            MobileAds.initialize(this, getResources().getString(R.string.admob_app_id));
+            interstitialAd = new InterstitialAd(this);
+            interstitialAd.setAdUnitId(getResources().getString(R.string.admob_interstitial_unit_id));
+            interstitialAd.loadAd(getAdRequest());
+            interstitialAd.setAdListener(new AdListener() {
+                @Override
+                public void onAdClosed() {
+                    interstitialAd.loadAd(new AdRequest.Builder().build());
+                }
+            });
+        }
+    }
+
+
+    private void showInterstitialAd() {
+        if (mViewModel.isENABLE_ADMOB_INTERSTITIAL_ADS()) {
+            if (interstitialAd != null && interstitialAd.isLoaded()) {
+                if (counter == mViewModel.getADMOB_INTERSTITIAL_ADS_INTERVAL()) {
+                    interstitialAd.show();
+                    counter = 1;
+                } else {
+                    counter++;
+                }
+            }
+        }
+    }
+
+    public static AdRequest getAdRequest() {
+        return new AdRequest.Builder()
+               // .addNetworkExtrasBundle(AdMobAdapter.class, GDPR.getBundleAd(activity))
+                .build();
     }
 }

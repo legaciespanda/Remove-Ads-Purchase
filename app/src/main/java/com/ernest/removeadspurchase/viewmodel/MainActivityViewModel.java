@@ -7,6 +7,8 @@ public class MainActivityViewModel extends ViewModel {
     //Ads Configuration
     //set true to enable or set false to disable
     private  final boolean ENABLE_ADMOB_BANNER_ADS = false;
+    private  final boolean ENABLE_ADMOB_INTERSTITIAL_ADS = true;
+    public   final int ADMOB_INTERSTITIAL_ADS_INTERVAL = 3;
 
     //YOUR LICENSE KEY FROM GOOGLE PLAY CONSOLE HERE
     private  final String GOOGLE_PLAY_CONSOL_LICENSE_KEY = "GOOGLE_PLAY_CONSOL_LICENSE_KEY HERE";
@@ -44,5 +46,13 @@ public class MainActivityViewModel extends ViewModel {
 
     public String getIspuduct_puchase() {
         return ispuduct_puchase;
+    }
+
+    public boolean isENABLE_ADMOB_INTERSTITIAL_ADS() {
+        return ENABLE_ADMOB_INTERSTITIAL_ADS;
+    }
+
+    public int getADMOB_INTERSTITIAL_ADS_INTERVAL() {
+        return ADMOB_INTERSTITIAL_ADS_INTERVAL;
     }
 }
