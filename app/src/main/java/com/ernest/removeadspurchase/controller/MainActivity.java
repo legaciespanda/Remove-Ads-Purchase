@@ -12,6 +12,7 @@ import android.widget.Button;
 import android.widget.Toast;
 import com.anjlab.android.iab.v3.BillingProcessor;
 import com.anjlab.android.iab.v3.TransactionDetails;
+import com.developer.kalert.KAlertDialog;
 import com.ernest.removeadspurchase.R;
 import com.ernest.removeadspurchase.viewmodel.MainActivityViewModel;
 import com.gmail.samehadar.iosdialog.IOSDialog;
@@ -25,6 +26,10 @@ import com.google.android.gms.ads.initialization.OnInitializationCompleteListene
 
 import butterknife.BindView;
 
+/**
+ * Created: 23/03/2020
+ * Author: Ernest Obot
+ * */
 public class MainActivity extends AppCompatActivity implements BillingProcessor.IBillingHandler{
 
     //An instance of the MainActivityViewModel
@@ -138,13 +143,13 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
                 /** if already subscribe then we will change the static variable
                  * and call billingrpocessor release() method.
                  * */
-                MainActivity.purduct_purchase=true;
+                purduct_purchase = true;
                 bp.release();
                 iosDialog.cancel();
             }
             else {
                 sharedPreferences.edit().putBoolean(mViewModel.getIspuduct_puchase(),false).commit();
-                purduct_purchase=false;
+                purduct_purchase = false;
 
                 iosDialog.cancel();
             }
@@ -204,7 +209,8 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
     }
 
     private Boolean showInterstitialAd(boolean check){
-        //final boolean ENABLE_ADMOB_BANNER_ADS = false;
+        //mViewModel.isEnableAdmobBannerAds();
+
         if(check){
             if (interstitialAd.isLoaded()) {
                 interstitialAd.show();
